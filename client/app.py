@@ -1,11 +1,19 @@
 #! /usr/bin/env python3
 
 from flask import Flask
+from flask import request
+from flask import jsonify
+
+import random
+
 app = Flask(__name__)
 
-def get_avail_cols(board):
-    pass
+@app.route("/move", methods=['POST'])
+def move():
+    content = request.get_json()
+    available_columns = content['available_columns']
+    return jsonify({
+        'column': random.choice(available_columns),
+    })
 
-@app.route("/move")
-def make_move():
-    pass
+app.run(host='0.0.0.0', port=8091, debug=True)

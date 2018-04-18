@@ -59,7 +59,7 @@ class Connect4:
 
         return False
 
-    def boardState(self):
+    def get_board_state(self):
         # Normalize the board state to make it easier to read
         s = [['0' for x in range(self.width)] for y in range(self.height)]
         for i in range(self.height):
@@ -67,7 +67,7 @@ class Connect4:
                 s[i][j] = self.board[j][self.height - i - 1]
         return s
 
-    def toString(self):
+    def __str__(self):
         s = ''
         for i in range(self.height):
             for j in range(self.width):
