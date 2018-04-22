@@ -5,16 +5,16 @@ class Connect4:
         self.width = width
         self.height = height
 
-        self.board = [['0' for x in range(height)] for y in range(width)]
+        self.board = [[0 for x in range(height)] for y in range(width)]
 
     def column_full(self, column):
-        return all(val != '0' for val in self.board[column])
+        return all(val != 0 for val in self.board[column])
 
     def move(self, column, player):
         if self.column_full(column):
             return False
         else:
-            self.board[column][self.board[column].index('0')] = player
+            self.board[column][self.board[column].index(0)] = player
             return True
 
     def get_available_columns(self):
@@ -61,7 +61,7 @@ class Connect4:
 
     def get_board_state(self):
         # Normalize the board state to make it easier to read
-        s = [['0' for x in range(self.width)] for y in range(self.height)]
+        s = [[0 for x in range(self.width)] for y in range(self.height)]
         for i in range(self.height):
             for j in range(self.width):
                 s[i][j] = self.board[j][self.height - i - 1]
@@ -71,6 +71,6 @@ class Connect4:
         s = ''
         for i in range(self.height):
             for j in range(self.width):
-                s += self.board[j][self.height - i - 1] + ' '
+                s += str(self.board[j][self.height - i - 1]) + ' '
             s += "\n"
         return s

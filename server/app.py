@@ -20,7 +20,6 @@ def run_game():
 
     moves = []
     while True:
-        # TODO: Actually fill this out with real payload
         p1_response = requests.post(
             url=player1_url,
             json={
@@ -30,8 +29,8 @@ def run_game():
                 })
         p1_column = p1_response.json()['column']
         moves.append({'player': 1, 'column': p1_column})
-        b.move(p1_column, '1')
-        if b.winner('1'):
+        b.move(p1_column, 1)
+        if b.winner(1):
             print('Player 1 wins')
             print(str(b))
             return jsonify({
@@ -48,8 +47,8 @@ def run_game():
                 })
         p2_column = p2_response.json()['column']
         moves.append({'player': 2, 'column': p2_column})
-        b.move(p2_column, '2')
-        if b.winner('2'):
+        b.move(p2_column, 2)
+        if b.winner(2):
             print('Player 2 wins')
             print(str(b))
             return jsonify({
