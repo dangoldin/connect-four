@@ -3,12 +3,14 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
+from flask_cors import CORS
 
 from connect4 import Connect4
 
 import requests
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/game", methods=['GET'])
 def run_game():
@@ -53,6 +55,12 @@ def run_game():
             print(str(b))
             return jsonify({
                 'winner': 2,
+                'moves': moves,
+            })
+
+        if b.tie():
+            return jsonify({
+                'winner': 0,
                 'moves': moves,
             })
 

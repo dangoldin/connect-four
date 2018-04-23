@@ -59,6 +59,9 @@ class Connect4:
 
         return False
 
+    def tie(self):
+        return len(self.get_available_columns()) == 0 and not self.winner(1) and not self.winner(2)
+
     def get_board_state(self):
         # Normalize the board state to make it easier to read
         s = [[0 for x in range(self.width)] for y in range(self.height)]

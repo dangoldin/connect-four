@@ -145,6 +145,32 @@ class App extends Component {
     this.initBoard();
   }
 
+  componentDidMount() {
+    fetch("http://localhost:8090/game?player1_url=http%3A%2F%2Flocalhost%3A8091%2Fmove&player2_url=http%3A%2F%2Flocalhost%3A8091%2Fmove")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          for (let m of result['moves']) {
+            this.play(m['column']);
+          }
+
+          // this.setState({
+          //   isLoaded: true,
+          //   items: result.items
+          // });
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          // this.setState({
+          //   isLoaded: true,
+          //   error
+          // });
+        }
+      )
+  }
+
   render() {
     return (
       <div>
@@ -188,7 +214,6 @@ class App extends Component {
   // }
 }
 
-// Row component
 const Row = ({ row, play }) => {
   return (
     <tr>
