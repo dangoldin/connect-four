@@ -39,6 +39,29 @@ class App extends Component {
     return (this.state.currentPlayer === this.state.player1) ? this.state.player2 : this.state.player1;
   }
 
+  playAutomatedGame() {
+    fetch("http://localhost:8090/game?player1_url=http%3A%2F%2Flocalhost%3A8091%2Fmove&player2_url=http%3A%2F%2Flocalhost%3A8091%2Fmove")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        let play = this.play;
+        let timer = 0, step = 500;
+        for (let m of result['moves']) {
+          // this.play(m['column']);
+          setTimeout(function(){
+            play(m['column']);
+          }, timer);
+          timer += step;
+        }
+      },
+      (error) => {
+        this.setState({
+          message: 'Failed to fetch moves'
+        });
+      }
+    )
+  }
+
   play(c) {
     if (!this.state.gameOver) {
       // Place piece on board
@@ -146,35 +169,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:8090/game?player1_url=http%3A%2F%2Flocalhost%3A8091%2Fmove&player2_url=http%3A%2F%2Flocalhost%3A8091%2Fmove")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          for (let m of result['moves']) {
-            this.play(m['column']);
-          }
-
-          // this.setState({
-          //   isLoaded: true,
-          //   items: result.items
-          // });
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          // this.setState({
-          //   isLoaded: true,
-          //   error
-          // });
-        }
-      )
+    this.playAutomatedGame();
   }
 
   render() {
     return (
       <div>
-        <div className="button" onClick={() => {this.initBoard()}}>New Game</div>
+        <div className="button" onClick={() => {this.initBoard(); this.playAutomatedGame();}}>New Game</div>
 
         <table>
           <thead>
@@ -188,30 +189,6 @@ class App extends Component {
       </div>
     );
   }
-
-  // render() {
-  //   return (
-  //     <div className="App">
-  //       <header className="App-header">
-  //         <h1 className="App-title">Connect4</h1>
-  //       </header>
-
-  //       <div class="AppMain">
-  //         <div class="circles">
-  //           <div class="circle red-sm"></div>
-  //           <div class="circle yellow-sm"></div>
-  //           <div class="circle red-sm"></div>
-  //           <div class="circle yellow-sm"></div>
-  //           <div class="circle red-sm"></div>
-  //           <div class="circle yellow-sm"></div>
-  //           <div class="circle red-sm"></div>
-  //           <div class="circle yellow-sm"></div>
-  //         </div>
-  //         <div id="main"></div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 }
 
 const Row = ({ row, play }) => {
