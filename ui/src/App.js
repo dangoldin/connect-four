@@ -6,15 +6,40 @@ class App extends Component {
     super(props);
 
     this.state = {
+      player1Url: 'http://localhost:8091/move',
+      player2Url: 'http://localhost:3001/move',
       player1: 1,
       player2: 2,
       currentPlayer: null,
       board: [],
       gameOver: false,
-      message: ''
+      message: '',
+      stepSize: 500
     };
 
     this.play = this.play.bind(this);
+    this.handlePlayer1UrlChange = this.handlePlayer1UrlChange.bind(this);
+    this.handlePlayer2UrlChange = this.handlePlayer2UrlChange.bind(this);
+    this.handleStepSizeChange = this.handleStepSizeChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handlePlayer1UrlChange(event) {
+    this.setState({player1Url: event.target.value});
+  }
+
+  handlePlayer2UrlChange(event) {
+    this.setState({player2Url: event.target.value});
+  }
+
+  handleStepSizeChange(event) {
+    this.setState({stepSize: event.target.value});
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.initBoard();
+    this.playAutomatedGame();
   }
 
   // Starts new game
@@ -40,18 +65,21 @@ class App extends Component {
   }
 
   playAutomatedGame() {
-    fetch("http://localhost:8090/game?player1_url=http%3A%2F%2Flocalhost%3A8091%2Fmove&player2_url=http%3A%2F%2Flocalhost%3A8091%2Fmove")
+    const player1url = encodeURIComponent(this.state.player1Url);
+    const player2url = encodeURIComponent(this.state.player2Url);
+    const stepSize = this.state.stepSize;
+
+    fetch("http://localhost:8090/game?player1_url=" + player1url+"&player2_url=" + player2url)
     .then(res => res.json())
     .then(
       (result) => {
         let play = this.play;
-        let timer = 0, step = 500;
+        let timer = 0;
         for (let m of result['moves']) {
-          // this.play(m['column']);
           setTimeout(function(){
             play(m['column']);
           }, timer);
-          timer += step;
+          timer += stepSize;
         }
       },
       (error) => {
@@ -169,13 +197,28 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.playAutomatedGame();
+    // this.playAutomatedGame();
   }
 
   render() {
     return (
-      <div>
-        <div className="button" onClick={() => {this.initBoard(); this.playAutomatedGame();}}>New Game</div>
+      <div className="App">
+        <form onSubmit={this.handleSubmit}>
+          <div>
+            <input placeholder="player 1 url" className="playerEntry" type="text" value={this.state.player1Url} onChange={this.handlePlayer1UrlChange} />
+          </div>
+          <div>
+            <input placeholder="player 2 url" className="playerEntry" type="text" value={this.state.player2Url} onChange={this.handlePlayer2UrlChange} />
+          </div>
+          <div>
+            <input placeholder="speed" className="playerEntry" type="text" value={this.state.stepSize} onChange={this.handleStepSizeChange} />
+          </div>
+
+          {/* <div className="button" onClick={() => {this.initBoard(); this.playAutomatedGame();}}>
+            New Game
+          </div> */}
+          <input type="submit" value="Go" />
+        </form>
 
         <table>
           <thead>
