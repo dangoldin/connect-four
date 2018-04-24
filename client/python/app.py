@@ -11,6 +11,8 @@ app = Flask(__name__)
 @app.route("/move", methods=['POST'])
 def move():
     content = request.get_json()
+    board = content['board']
+    player = content['player']
     available_columns = content['available_columns']
     return jsonify({
         'column': random.choice(available_columns),

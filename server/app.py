@@ -67,3 +67,7 @@ def run_game():
 app.run(host='0.0.0.0', port=8090, debug=True)
 
 # curl http://localhost:8090/game\?player1_url\=http://localhost:8091/move\&player2_url\=http://localhost:8091/move
+
+# curl http://localhost:8090/game\?player1_url\=http://localhost:3000/move\&player2_url\=http://localhost:3000/move
+
+# curl http://localhost:8090/game\?player1_url\=http://localhost:8091/move\&player2_url\=http://localhost:3000/move

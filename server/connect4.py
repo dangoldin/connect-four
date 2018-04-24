@@ -22,7 +22,7 @@ class Connect4:
 
     def winner(self, player):
         # Horizontal
-        for i in range(self.height - 3):
+        for i in range(self.height):
             for j in range(self.width - 3):
                 if self.board[j][i] == player and \
                     self.board[j+1][i] == player and \
@@ -32,7 +32,7 @@ class Connect4:
 
         # Vertical
         for i in range(self.height - 3):
-            for j in range(self.width - 3):
+            for j in range(self.width):
                 if self.board[j][i] == player and \
                     self.board[j][i+1] == player and \
                     self.board[j][i+2] == player and \
